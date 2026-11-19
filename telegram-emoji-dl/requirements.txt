@@ -1,0 +1,4 @@
+telethon
+lottie[all]
+python-dotenv
+tqdm

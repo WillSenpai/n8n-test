@@ -1,0 +1,13 @@
+# Credenziali e sessioni Telegram
+.env
+*.session
+*.session-journal
+
+# Ambiente virtuale e cache Python
+.venv/
+__pycache__/
+*.pyc
+
+# Cartelle di output
+output/
+errors.log
