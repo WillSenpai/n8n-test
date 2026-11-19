@@ -1,23 +1,28 @@
-"""Configurazione condivisa: percorsi di output e nomi dei set di emoji."""
+"""Configurazione condivisa: percorsi e nomi dei set di emoji."""
 from pathlib import Path
 
 # Cartella del progetto (dove si trova questo file)
 BASE_DIR = Path(__file__).resolve().parent
 
-# Cartelle di output
+# Originali .tgs scaricati da Telegram (ignorati da git)
 OUTPUT_DIR = BASE_DIR / "output"
 TGS_DIR = OUTPUT_DIR / "tgs"
-JSON_DIR = OUTPUT_DIR / "json"
-GIF_DIR = OUTPUT_DIR / "gif"
-PNG_DIR = OUTPUT_DIR / "png"
-
-# File di supporto
 INDEX_FILE = OUTPUT_DIR / "index.json"
-ERRORS_LOG = BASE_DIR / "errors.log"
-SESSION_FILE = BASE_DIR / "telegram_emoji"  # Telethon aggiunge ".session"
 
-# Nomi (= sottocartelle) dei due set ufficiali di emoji animate
+# Asset finali pronti per Remotion/HyperFrames (JSON Lottie + manifest)
+LOTTIE_DIR = BASE_DIR / "public" / "lottie"
+MANIFEST_FILE = LOTTIE_DIR / "manifest.json"
+
+# Report e log
+REPORTS_DIR = BASE_DIR / "reports"
+COMPAT_REPORT = BASE_DIR / "compat-report.json"
+ERRORS_LOG = BASE_DIR / "errors.log"
+
+# File di sessione Telethon (Telethon aggiunge ".session")
+SESSION_FILE = BASE_DIR / "telegram_emoji"
+
+# Sottocartelle (= nomi) dei due set ufficiali di emoji animate
 SET_NAMES = ("animated_emoji", "animations")
 
-# Dimensione di GIF e PNG in pixel
-SIZE = 512
+# Campi obbligatori in un Lottie: fps, frame iniziale, frame finale, larghezza, altezza
+LOTTIE_REQUIRED = ("fr", "ip", "op", "w", "h")

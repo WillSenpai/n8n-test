@@ -1,0 +1,19 @@
+{
+  "name": "telegram-emoji-dl",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Strumenti Node: test di compatibilità lottie-web e render di prova degli esempi",
+  "type": "module",
+  "scripts": {
+    "compat": "node compat/run-compat.mjs",
+    "test:remotion": "node scripts/render-test.mjs remotion",
+    "test:hyperframes": "node scripts/render-test.mjs hyperframes"
+  },
+  "dependencies": {
+    "lottie-web": "^5.13.0"
+  },
+  "devDependencies": {
+    "playwright": "^1.63.0",
+    "pngjs": "^7.0.0"
+  }
+}

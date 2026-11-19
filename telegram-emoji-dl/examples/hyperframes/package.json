@@ -1,0 +1,22 @@
+{
+  "name": "emoji-hyperframes-example",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Esempio minimo: un'emoji animata Telegram (Lottie JSON) in HyperFrames con lottie-web locale",
+  "type": "module",
+  "scripts": {
+    "prepare:emoji": "node scripts/prepare.mjs",
+    "lint": "hyperframes lint",
+    "dev": "hyperframes preview",
+    "render": "hyperframes render"
+  },
+  "dependencies": {
+    "gsap": "^3.13.0",
+    "lottie-web": "^5.13.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.0",
+    "hyperframes": "^0.9.70",
+    "typescript": "^5.6.0"
+  }
+}

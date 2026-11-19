@@ -1,0 +1,31 @@
+<!doctype html>
+<!-- Template: scripts/prepare.mjs genera index.html sostituendo durata e fps letti dal manifest. -->
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: #1b1f3a; }
+      #root { position: relative; width: 1920px; height: 1080px; }
+      /* Contenitore del Lottie con dimensioni FISSE (richiesto da HyperFrames) */
+      #emoji { position: absolute; left: 560px; top: 140px; width: 800px; height: 800px; }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="emoji"
+      data-start="0"
+      data-duration="{{DURATION}}"
+      data-fps="{{FPS}}"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div id="emoji"></div>
+    </div>
+    <!-- Tutto locale, nessuna CDN: librerie compilate da npm + codice della composizione -->
+    <script src="vendor/libs.min.js"></script>
+    <script src="dist/emoji.js"></script>
+  </body>
+</html>

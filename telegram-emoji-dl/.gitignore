@@ -1,13 +1,28 @@
-# Credenziali e sessioni Telegram
+# Credenziali e sessioni Telegram (MAI committare)
 .env
 *.session
 *.session-journal
 
-# Ambiente virtuale e cache Python
+# Python
 .venv/
 __pycache__/
 *.pyc
 
-# Cartelle di output
+# Node
+node_modules/
+
+# Cartelle di output (i .tgs originali; i JSON pronti all'uso stanno in public/lottie e SI committano)
 output/
 errors.log
+
+# Render di prova generati dagli esempi
+examples/remotion/out/
+examples/hyperframes/renders/
+examples/hyperframes/vendor/
+examples/hyperframes/dist/
+examples/hyperframes/assets/
+examples/hyperframes/.hyperframes/
+examples/hyperframes/index.html
+examples/hyperframes/.agents/
+examples/hyperframes/.claude/
+examples/hyperframes/skills-lock.json

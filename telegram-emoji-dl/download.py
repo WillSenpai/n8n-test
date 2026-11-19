@@ -1,4 +1,4 @@
-"""Scarica le emoji animate classiche di Telegram (file .tgs) e crea index.json."""
+"""Scarica le emoji animate classiche di Telegram (file .tgs) e crea output/index.json."""
 import asyncio
 import json
 import os

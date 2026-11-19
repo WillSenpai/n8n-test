@@ -1,0 +1,85 @@
+<!doctype html>
+<!-- Pagina di test: carica un Lottie con lottie-web (locale), fa seek su 3 frame e controlla che il render non sia vuoto. -->
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <title>Compat lottie-web</title>
+    <style>
+      html, body { margin: 0; background: transparent; }
+      /* Contenitore a dimensioni fisse (stessa regola di HyperFrames) */
+      #stage { width: 256px; height: 256px; }
+    </style>
+    <script src="/vendor/lottie.js"></script>
+  </head>
+  <body>
+    <div id="stage"></div>
+    <script>
+      const SIZE = 256;
+
+      // Aspetta che lottie-web abbia creato il DOM dell'animazione (o fallisca)
+      function whenLoaded(anim) {
+        return new Promise((resolve, reject) => {
+          anim.addEventListener("DOMLoaded", resolve);
+          anim.addEventListener("data_failed", () => reject(new Error("data_failed: JSON non valido per lottie-web")));
+        });
+      }
+
+      // Rasterizza l'SVG in un canvas e conta i pixel visibili (alpha > 8)
+      async function paintedPixels(svg) {
+        const clone = svg.cloneNode(true);
+        clone.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+        clone.setAttribute("width", SIZE);
+        clone.setAttribute("height", SIZE);
+        const blob = new Blob([new XMLSerializer().serializeToString(clone)], { type: "image/svg+xml" });
+        const url = URL.createObjectURL(blob);
+        try {
+          const img = new Image();
+          await new Promise((res, rej) => { img.onload = res; img.onerror = () => rej(new Error("SVG non rasterizzabile")); img.src = url; });
+          const canvas = document.createElement("canvas");
+          canvas.width = canvas.height = SIZE;
+          const ctx = canvas.getContext("2d", { willReadFrequently: true });
+          ctx.drawImage(img, 0, 0, SIZE, SIZE);
+          const px = ctx.getImageData(0, 0, SIZE, SIZE).data;
+          let n = 0;
+          for (let i = 3; i < px.length; i += 4) if (px[i] > 8) n++;
+          return n;
+        } finally {
+          URL.revokeObjectURL(url);
+        }
+      }
+
+      // Frame da provare: inizio, metà, fine
+      function framesToTest(total) {
+        const last = Math.max(0, total - 1);
+        return [0, Math.floor(last / 2), last];
+      }
+
+      // Testa un singolo file. Restituisce {ok, cause?, warnings, frames}
+      window.testFile = async function (file) {
+        const stage = document.getElementById("stage");
+        stage.innerHTML = "";
+        let anim;
+        try {
+          const data = await (await fetch("/lottie/" + encodeURI(file))).json();
+          anim = lottie.loadAnimation({ container: stage, renderer: "svg", loop: false, autoplay: false, animationData: data });
+          await whenLoaded(anim);
+          if (!stage.querySelector("svg")) return { ok: false, cause: "nessun <svg> creato da lottie-web", frames: [] };
+          const frames = [];
+          for (const f of framesToTest(anim.totalFrames)) {
+            anim.goToAndStop(f, true); // seek: niente play()
+            await new Promise((r) => requestAnimationFrame(r));
+            frames.push({ frame: f, pixels: await paintedPixels(stage.querySelector("svg")) });
+          }
+          const empty = frames.filter((x) => x.pixels === 0).map((x) => x.frame);
+          if (empty.length === frames.length) return { ok: false, cause: "render vuoto su tutti i frame provati (" + empty.join(", ") + ")", frames };
+          const warnings = empty.length ? ["frame vuoti: " + empty.join(", ")] : [];
+          return { ok: true, warnings, frames };
+        } catch (err) {
+          return { ok: false, cause: String(err && err.message ? err.message : err), frames: [] };
+        } finally {
+          if (anim) anim.destroy();
+        }
+      };
+    </script>
+  </body>
+</html>
