@@ -7,7 +7,8 @@
   "scripts": {
     "compat": "node compat/run-compat.mjs",
     "test:remotion": "node scripts/render-test.mjs remotion",
-    "test:hyperframes": "node scripts/render-test.mjs hyperframes"
+    "test:hyperframes": "node scripts/render-test.mjs hyperframes",
+    "preview": "node preview/server.mjs"
   },
   "dependencies": {
     "lottie-web": "^5.13.0"

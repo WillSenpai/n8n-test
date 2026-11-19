@@ -61,6 +61,7 @@ npx playwright install chromium
 |---|---|
 | `python download.py` | Scarica i `.tgs` in `output/tgs/<set>/` e scrive `output/index.json`. Al primo avvio chiede numero di telefono e codice; la sessione resta in `telegram_emoji.session`. Si può rilanciare: salta i file già scaricati e aspetta i `FloodWait`. |
 | `python convert.py` | `.tgs` → JSON in `public/lottie/<set>/`, valida `fr, ip, op, w, h`, genera `manifest.json`. I file corrotti vanno in `errors.log`. |
+| `npm run preview` | Anteprima nel browser: griglia animata di tutte le emoji con ricerca (`npm run preview -- 🚀` o `-- 1f680`), filtro per set, finestra di dettaglio con play/pausa e seek frame per frame. |
 | `npm run compat` | Carica ogni JSON in lottie-web (headless Chrome), fa seek su inizio/metà/fine e scrive `compat-report.json`. |
 | `npm run test:remotion` | Render di 1 frame dell'esempio Remotion e controllo che l'emoji compaia. |
 | `npm run test:hyperframes` | Render MP4 dell'esempio HyperFrames e stesso controllo. |
@@ -74,7 +75,7 @@ Se Chrome non viene trovato imposta `CHROME_PATH=/percorso/di/chrome`.
 telegram-emoji-dl/
 ├── download.py  convert.py  verify.py  config.py     # pipeline Python
 ├── setup.sh  run_all.sh  requirements.txt  .env.example
-├── package.json  compat/  scripts/                   # test lottie-web e render di prova
+├── package.json  compat/  scripts/  preview/         # test lottie-web, render di prova, anteprima nel browser
 ├── public/lottie/                                    # ASSET FINALI (da committare)
 │   ├── manifest.json
 │   ├── animated_emoji/*.json
@@ -96,6 +97,19 @@ problemi con URL e percorsi; l'emoji vera è nel `manifest.json`. I `.tgs` origi
 { "id": "1f600", "file": "animated_emoji/1f600.json", "emoji": "😀", "set": "animated_emoji",
   "fps": 60, "durationInFrames": 120, "durationInSeconds": 2, "width": 512, "height": 512, "documentId": 123 }
 ```
+
+## Anteprima nel browser
+
+Dopo `convert.py`:
+
+```bash
+npm run preview            # griglia di tutte le emoji
+npm run preview -- 🚀      # apre già filtrata (anche per id: 1f680)
+```
+
+Apri l'indirizzo stampato (`http://127.0.0.1:5173`). Le animazioni partono solo quando la card è visibile, quindi resta
+fluida anche con centinaia di emoji. L'anteprima fa girare i Lottie in loop: serve per guardarli, non per montare i video
+(per quello usa gli esempi Remotion/HyperFrames).
 
 ## Usare un'emoji in Remotion
 
